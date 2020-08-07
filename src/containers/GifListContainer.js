@@ -7,6 +7,18 @@ class GifListContainer extends React.Component {
         gifs: [] 
     } 
 
+    componentDidMount() {
+        this.fetchGIFs() 
+    }
+
+    fetchGIFs = (query = "virat kohli", limit = 10) => {
+        fetch(`https://api.giphy.com/v1/gifs/search?q=${query}&api_key=dc6zaTOxFJmzC&rating=g&limit=${limit}`) 
+           .then(res => res.json()) 
+           .then(({data}) => {
+               this.setState({gifs: data.map(gif => ({url: gif.images.original.url}))}) 
+        })  
+    } 
+
     render() {
         return (
             <div>
@@ -14,19 +26,7 @@ class GifListContainer extends React.Component {
                 <GifList gifs={this.state.gifs} /> 
             </div>
         )
-    } 
-
-    fetchGIFs = (query = "dolphins") => {
-        fetch(`https://api.giphy.com/v1/gifs/search?q=${query}&api_key=dc6zaTOxFJmzC&rating=g&limit=3`) 
-           .then(res => res.json()) 
-           .then(({data}) => {
-               this.setState({gifs: data.map(gif => ({url: gif.images.original.url}))}) 
-        })  
-    } 
-
-    componentDidMount() {
-        this.fetchGIFs() 
-    }
+    }  
 } 
 
 export default GifListContainer; 
